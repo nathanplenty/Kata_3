@@ -17,7 +17,6 @@ func isValid(s string) bool {
 	bro := bracket{0, '0'}
 	sis := bracket{0, '0'}
 	// 1. Get string
-	// fmt.Println("Input:", s)
 	// 2. Is string bigger than 0
 	// 2.1. If false -> kill funcion, return bool
 	for {
@@ -29,7 +28,6 @@ func isValid(s string) bool {
 		i = 0
 		g1 := func() bool {
 			b = false
-			// fmt.Printf("%T", s)
 			for ; i < len(s); i++ {
 				p = i
 				b = bytes.ContainsAny([]byte(s), "()[]{}")
@@ -68,7 +66,6 @@ func isValid(s string) bool {
 		// 5. Search for bracket after position of bracket 1
 		l := 0
 		for {
-			// fmt.Println("Loop round:", l)
 			l = l + 1
 			i = p + 1
 			b = g1()
@@ -104,10 +101,8 @@ func isValid(s string) bool {
 		del := func() {
 			brocopy := s
 			brocopy = brocopy[:(bro.x)]
-			// fmt.Println(brocopy)
 			siscopy := s
 			siscopy = siscopy[(sis.x + 1):]
-			// fmt.Println(siscopy)
 			s = brocopy + siscopy
 		}
 		b = false
@@ -125,11 +120,9 @@ func isValid(s string) bool {
 }
 
 func main() {
-	fmt.Println("START")
 	fmt.Println("Is Valid?:", isValid("()"))
 	fmt.Println("Is Valid?:", isValid("()[]{}"))
 	fmt.Println("Is Valid?:", isValid("(])"))
 	fmt.Println("Is Valid?:", isValid("([)]"))
 	fmt.Println("Is Valid?:", isValid("{[]}"))
-	fmt.Println("STOP")
 }
