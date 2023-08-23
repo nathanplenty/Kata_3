@@ -6,54 +6,34 @@ import (
 )
 
 func isValid(s string) bool {
-	// 1. Get string -> (([]){}[])
-	str := s
-	// 1.1. Get len of string
-	l := len(str)
-	// 1.2. Check if string is len 2 or more
-	// 1.F. return false -> kill function
-	if l < 2 {
-		return false
-	}
+	// Initialize stack as placeholder for brackets
 	type Stack struct {
-		Chars []interface{}
+		Chars []byte
 	}
 	stack := Stack{}
-	// 2.1. init current char -> current
+	// Initialize current character for current bracket
 	var current byte = '0'
-	// 3. Get string[n] (n+1) -> current = string[n]
-	for i := 0; i < l; i++ {
-		current = byte(str[i])
-		// 3.1. Check if opener bracket
+	// Get each character as i
+	for i := 0; i < len(s); i++ {
+		current = byte(s[i])
+		// Check if character can be used
 		switch {
+		// If opener bracket, append it
 		case true == bytes.ContainsAny([]byte(string(current)), "([{"):
-			// 3.T. Put string[n] on stack -> stack[n] = current -> GoTo 3
 			stack.Chars = append(stack.Chars, current)
+		// If correct closer bracket, remove it and its opener
+		case current-1 == stack.Chars[(len(stack.Chars))-1]:
+			stack.Chars = stack.Chars[:(len(stack.Chars))-1]
+		case current-2 == stack.Chars[(len(stack.Chars))-1]:
+			stack.Chars = stack.Chars[:(len(stack.Chars))-1]
 		default:
-			// 3.F. Check if index 0
-			if len(stack.Chars) == 0 {
-				// 3.T.1. return false -> kill function
-				return false
-			}
-			// 3.F.1. Check if current is its closer
-			switch {
-			// 3.T.2. Del stack[n] -> GoTo 3
-			case current-1 == stack.Chars[(len(stack.Chars))-1]:
-				stack.Chars = stack.Chars[:(len(stack.Chars))-1]
-			case current-2 == stack.Chars[(len(stack.Chars))-1]:
-				stack.Chars = stack.Chars[:(len(stack.Chars))-1]
-			default:
-				// 3.F.2. return false -> kill function
-				return false
-			}
+			return false
 		}
 	}
-	// 4. Check if stack is empty
+	// Check if stack is empty, no brackets left
 	if len(stack.Chars) == 0 {
-		// 4.T. return true -> kill function
 		return true
 	}
-	// 4.F. return false -> kill function
 	return false
 }
 
