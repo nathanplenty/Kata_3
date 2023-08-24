@@ -1,27 +1,25 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
+	"strings"
 )
 
 func isValid(stringIn string) bool {
-	// Initialize stack as placeholder for brackets
+	lengthOfStringIn := strings.Count(stringIn, "") - 1
+	if lengthOfStringIn < 2 {
+		return false
+	}
 	type Stack struct {
-		Chars []byte
+		Chars []rune
 	}
 	stack := Stack{}
-	// Initialize current character for current bracket
-	var currentCharacter byte = '0'
-	// Get each character as char
-	for char := 0; char < len(stringIn); char++ {
-		currentCharacter = byte(stringIn[char])
-		// Check if character can be used
+	var currentCharacter rune
+	for char := 0; char < lengthOfStringIn; char++ {
+		currentCharacter = rune(stringIn[char])
 		switch {
-		// If opener bracket, append it
-		case true == bytes.ContainsAny([]byte(string(currentCharacter)), "([{"):
+		case true == strings.ContainsAny((string(currentCharacter)), "([{"):
 			stack.Chars = append(stack.Chars, currentCharacter)
-		// If correct closer bracket, remove it and its opener
 		case currentCharacter-1 == stack.Chars[(len(stack.Chars))-1]:
 			stack.Chars = stack.Chars[:(len(stack.Chars))-1]
 		case currentCharacter-2 == stack.Chars[(len(stack.Chars))-1]:
@@ -30,11 +28,7 @@ func isValid(stringIn string) bool {
 			return false
 		}
 	}
-	// Check if stack is empty, no brackets left
-	if len(stack.Chars) == 0 {
-		return true
-	}
-	return false
+	return len(stack.Chars) == 0
 }
 
 func main() {

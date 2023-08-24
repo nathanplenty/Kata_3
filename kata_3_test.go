@@ -5,17 +5,25 @@ import (
 )
 
 func TestIsValidYes(t *testing.T) {
-	s := "()"
-	b := isValid(s)
-	if b != true {
-		t.Errorf("b = %v; want true", b)
+	stringIn := "()"
+	boolean := isValid(stringIn)
+	if boolean != true {
+		t.Errorf("b = %v; want true", boolean)
 	}
 }
 
-func Test3IsValidNo(t *testing.T) {
-	s := "([)]"
-	b := isValid(s)
-	if b != false {
-		t.Errorf("b = %v; want false", b)
+func TestIsValidNo(t *testing.T) {
+	stringIn := "([)]"
+	boolean := isValid(stringIn)
+	if boolean != false {
+		t.Errorf("boolean = %v; want false", boolean)
+	}
+}
+
+func TestIsValidTooSmall(t *testing.T) {
+	stringIn := ""
+	boolean := isValid(stringIn)
+	if boolean != false {
+		t.Errorf("boolean = %v; want false", boolean)
 	}
 }
