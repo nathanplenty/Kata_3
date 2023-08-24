@@ -1,122 +1,34 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	// "strings"
+	"strings"
 )
 
-func isValid(s string) bool {
-	b := false
-	i := 0
-	p := 0
-	type bracket struct {
-		x int
-		y byte
+func isValid(stringIn string) bool {
+	lengthOfStringIn := strings.Count(stringIn, "") - 1
+	if lengthOfStringIn < 2 {
+		return false
 	}
-	bro := bracket{0, '0'}
-	sis := bracket{0, '0'}
-	// 1. Get string
-	// 2. Is string bigger than 0
-	// 2.1. If false -> kill funcion, return bool
-	for {
-		if len(s) == 0 {
-			return b
-		}
-		// 2.2. If true -> continue
-		// 3. Search for bracket
-		i = 0
-		g1 := func() bool {
-			b = false
-			for ; i < len(s); i++ {
-				p = i
-				b = bytes.ContainsAny([]byte(s), "()[]{}")
-				if b == true {
-					return b
-				}
-			}
-			return b
-		}
-		b = g1()
-		if b == false {
-			return b
-		}
-		// 4. Is bracket opener -> True / False
-		// 4.1. If true -> Save bracket 1 and position
-		o1 := func() bool {
-			b = false
-			switch {
-			case s[p] == '(':
-				bro = bracket{p, '('}
-				b = true
-			case s[p] == '{':
-				bro = bracket{p, '{'}
-				b = true
-			case s[p] == '[':
-				bro = bracket{p, '['}
-				b = true
-			}
-			return b
-		}
-		b = o1()
-		// 4.2. If false -> kill function, return false
-		if b == false {
-			return b
-		}
-		// 5. Search for bracket after position of bracket 1
-		l := 0
-		for {
-			l = l + 1
-			i = p + 1
-			b = g1()
-			if b == false {
-				return b
-			}
-			// 6. Is bracket opener -> True / False
-			b = o1()
-			// 6.1. If false -> GoTo Step 7.
-			if b == false {
-				break
-			}
-			// 6.2. If true -> overwrite bracket 1 and position -> GoTo Step 5.
-		}
-		// 7. Is bracket closer to bracket 1
-		o2 := func() bool {
-			b = false
-			switch {
-			case s[p] == ')':
-				sis = bracket{p, '('}
-				b = true
-			case s[p] == '}':
-				sis = bracket{p, '{'}
-				b = true
-			case s[p] == ']':
-				sis = bracket{p, '['}
-				b = true
-			}
-			return b
-		}
-		b = o2()
-		// 7.1. If true -> Delete both, go back so step 1.
-		del := func() {
-			brocopy := s
-			brocopy = brocopy[:(bro.x)]
-			siscopy := s
-			siscopy = siscopy[(sis.x + 1):]
-			s = brocopy + siscopy
-		}
-		b = false
-		if bro.y == sis.y {
-			b = true
-			del()
-		}
-		// 7.2. If false -> kill function, return false
-		if bro.y != sis.y {
-			b = false
-			break
+	type Stack struct {
+		Chars []rune
+	}
+	stack := Stack{}
+	var currentCharacter rune
+	for char := 0; char < lengthOfStringIn; char++ {
+		currentCharacter = rune(stringIn[char])
+		switch {
+		case true == strings.ContainsAny((string(currentCharacter)), "([{"):
+			stack.Chars = append(stack.Chars, currentCharacter)
+		case currentCharacter-1 == stack.Chars[(len(stack.Chars))-1]:
+			stack.Chars = stack.Chars[:(len(stack.Chars))-1]
+		case currentCharacter-2 == stack.Chars[(len(stack.Chars))-1]:
+			stack.Chars = stack.Chars[:(len(stack.Chars))-1]
+		default:
+			return false
 		}
 	}
-	return b
+	return len(stack.Chars) == 0
 }
 
 func main() {
